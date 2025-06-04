@@ -22,6 +22,36 @@
 - If facing a jittery hand, adjust the PID values down.
 - If the hand is too weak, adjust the PID values up.
 
+#### Docker install
+To build docker images, you can choose between ROS1 and ROS2:
+
+```
+docker compose build leap-hand-ros1
+docker commpose up leap-hand-ros1 -d
+docker exec -ti leap-hand-ros1 /bin/bash
+```
+
+or
+
+```
+docker compose build leap-hand-ros2
+docker compose up leap-hand-ros2 -d
+docker exec -ti leap-hand-ros2 /bin/bash
+```
+
+once in the container you can run the example script with:
+
+```
+roslaunch leap_hand example.launch
+```
+
+or
+
+```
+ros2 launch leap_hand launch_leap.py
+```
+
+
 #### Troubleshooting
 - If your motor is 90/180/270 Degrees off, the horn is mounted incorrectly on the motor.  Remount it.
 - If no motors show up, check that your serial port permissions are correct.

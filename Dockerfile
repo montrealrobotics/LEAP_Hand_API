@@ -1,6 +1,4 @@
 # Dockerfile for LEAP Hand with ROS 1/2 options
-# Build with: docker build --build-arg ROS_VERSION=<1 or 2> -t leap-hand-ros .
-# Run with: docker run --privileged -v /dev:/dev --device-cgroup-rule='c 188:* rmw' leap-hand-ros
 
 ARG ROS_VERSION=2
 ARG ROS_DISTRO_1=noetic

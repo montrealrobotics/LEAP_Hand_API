@@ -9,6 +9,8 @@ services:
     image: leap-hand-ros1
     container_name: leap-hand-ros1
     privileged: true
+    tty: true
+    stdin_open: true
     devices:
       - "/dev:/dev"
     environment:
@@ -25,6 +27,8 @@ services:
     image: leap-hand-ros2
     container_name: leap-hand-ros2
     privileged: true
+    stdin_open: true
+    tty: true
     devices:
       - "/dev:/dev"
     environment:
