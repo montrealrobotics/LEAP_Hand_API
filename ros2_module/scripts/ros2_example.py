@@ -18,7 +18,7 @@ class MinimalClientAsync(Node):
         while not self.cli.wait_for_service(timeout_sec=1.0):
             self.get_logger().info('service not available, waiting again...')
         self.req = LeapPosVelEff.Request()
-        self.pub_hand = self.create_publisher(JointState, '/cmd_ones', 10) 
+        self.pub_hand = self.create_publisher(JointState, '/cmd_allegro', 10)
 
     def send_request(self):
         self.future = self.cli.call_async(self.req)

@@ -9,6 +9,7 @@ services:
     image: leap-hand-ros1
     container_name: leap-hand-ros1
     privileged: true
+    network_mode: host
     tty: true
     stdin_open: true
     devices:
@@ -27,6 +28,7 @@ services:
     image: leap-hand-ros2
     container_name: leap-hand-ros2
     privileged: true
+    network_mode: host
     stdin_open: true
     tty: true
     devices:
