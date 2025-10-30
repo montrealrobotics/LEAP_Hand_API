@@ -1,20 +1,11 @@
 import os
 
+from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch_ros.actions import Node
-from launch.actions import DeclareLaunchArgument
-from launch.substitutions import LaunchConfiguration
 
 def generate_launch_description():
-    sim_arg = DeclareLaunchArgument(
-        'sim',
-        default_value='false',
-        description='Run in simulation mode'
-    )
-
-    sim = LaunchConfiguration('sim')
     return LaunchDescription([
-        sim_arg,
         Node(
             package='leap_hand',
             executable='leaphand_node.py',
@@ -25,14 +16,13 @@ def generate_launch_description():
                 {'kP': 800.0},
                 {'kI': 0.0},
                 {'kD': 200.0},
-                {'curr_lim': 500.0},
-                {'sim': sim},
+                {'curr_lim': 500.0}
             ]
         ),
         Node(
             package='leap_hand',
-            executable='ros2_example.py',
-            name='ros2_example',
+            executable='leap_hand_redis.py',
+            name='leap_hand_redis',
             emulate_tty=True,
             output='screen'
         )

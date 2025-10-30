@@ -50,6 +50,7 @@ RUN curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o 
     && apt-get update \
     && apt-get install -y \
         ros-${ROS_DISTRO_2}-desktop \
+        redis-server \
         ros-dev-tools \
     && rm -rf /var/lib/apt/lists/*
 
@@ -92,6 +93,7 @@ RUN if [ "$ROS_VERSION" = "1" ]; then \
         echo "source /leap_ws/devel/setup.bash" >> ~/.bashrc && \
         echo '#!/bin/bash\nsource /opt/ros/'${ROS_DISTRO_1}'/setup.bash\nsource /leap_ws/devel/setup.bash\nroslaunch leap_hand_ros leap.launch' > /launch.sh; \
     else \
+        pip install numpy==2.2.6 && \
         echo "source /opt/ros/${ROS_DISTRO_2}/setup.bash" >> ~/.bashrc && \
         echo "source /leap_ws/install/setup.bash" >> ~/.bashrc && \
         echo '#!/bin/bash\nsource /opt/ros/'${ROS_DISTRO_2}'/setup.bash\nsource /leap_ws/install/setup.bash\nros2 launch launch_leap.py' > /launch.sh; \

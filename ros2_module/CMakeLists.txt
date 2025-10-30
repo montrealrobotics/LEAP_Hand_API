@@ -33,6 +33,7 @@ ament_package()
 install(PROGRAMS
   scripts/leaphand_node.py
   scripts/ros2_example.py
+  scripts/leap_hand_redis.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

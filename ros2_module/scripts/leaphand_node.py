@@ -21,6 +21,46 @@ from leap_hand.srv import LeapPosition, LeapVelocity, LeapEffort, LeapPosVelEff
 #I recommend you only query when necessary and below 90 samples a second.  Used the combined commands if you can to save time.  Also don't forget about the USB latency settings in the readme.
 #The services allow you to always have the latest data when you want it, and not spam the communication lines with unused data.
 
+class MockDynamixelClient:
+    def __init__(self, motors, port, baud):
+        self.motors = motors
+        self.port = port
+        self.baud = baud
+        self.fake_pos = np.zeros(len(motors))
+        self.fake_vel = np.zeros(len(motors))
+        self.fake_cur = np.zeros(len(motors))
+        print(f"[MOCK] Initialized mock client for {port} at {baud} baud")
+
+    def connect(self):
+        print(f"[MOCK] Pretending to connect to motors {self.motors} on {self.port}")
+
+    def write_positions(self, positions):
+        pass
+
+    def sync_write(self, motor_ids, values, address, data_len):
+        pass
+
+    def set_torque_enabled(self, motor_ids, enable):
+        pass
+
+    def write_desired_pos(self, motor_ids, positions):
+        pass
+
+    def read_pos_vel_cur(self):
+        # Increment positions slightly each call to simulate motion
+        self.fake_vel = np.random.uniform(-0.01, 0.01, len(self.motors))
+        self.fake_pos += self.fake_vel
+        self.fake_cur = np.random.uniform(0, 0.1, len(self.motors))
+        return self.fake_pos, self.fake_vel, self.fake_cur
+
+    def read_positions(self):
+        # Return fake positions for all motors
+        return np.zeros(len(self.motors))
+
+    def disconnect(self):
+        print("[MOCK] Disconnected")
+
+
 class LeapNode(Node):
     def __init__(self):
         super().__init__('leaphand_node')
@@ -28,6 +68,7 @@ class LeapNode(Node):
         self.kP = self.declare_parameter('kP', 800.0).get_parameter_value().double_value
         self.kI = self.declare_parameter('kI', 0.0).get_parameter_value().double_value
         self.kD = self.declare_parameter('kD', 200.0).get_parameter_value().double_value
+        self.sim = self.declare_parameter('sim', False).get_parameter_value().bool_value
         self.curr_lim = self.declare_parameter('curr_lim', 350.0).get_parameter_value().double_value
         self.ema_amount = 0.2
         self.prev_pos = self.pos = self.curr_pos = lhu.allegro_to_LEAPhand(np.zeros(16))
@@ -48,7 +89,10 @@ class LeapNode(Node):
         # For example: /dev/serial/by-id/usb-FTDI_USB__-__Serial_Converter_FT7W91VW-if00-port0
         self.motors = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
         try:
-            self.dxl_client = DynamixelClient(self.motors, '/dev/ttyUSB0', 4000000)
+            if self.sim:
+                self.dxl_client = MockDynamixelClient(self.motors, '/dev/ttyUSB0', 4000000)
+            else:
+                self.dxl_client = DynamixelClient(self.motors, '/dev/ttyUSB0', 4000000)
             self.dxl_client.connect()
         except Exception:
             try:
