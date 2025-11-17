@@ -24,7 +24,7 @@ class LeapErrorPlotter(Node):
         self.req = LeapPosition.Request()
 
         self.sub_cmd = self.create_subscription(
-            JointState, "cmd_allegro", self._receive_cmd, 10
+            JointState, "cmd_leap", self._receive_cmd, 10
         )
 
         self.cmd_pos = np.zeros(16)
@@ -126,9 +126,7 @@ class LeapErrorPlotter(Node):
             result = future.result()
             if result and hasattr(result, "position") and len(result.position) >= 16:
                 with self._lock:
-                    self.state_pos = np.array(
-                        lhu.LEAPhand_to_allegro(result.position[:16], zeros=False)
-                    )
+                    self.state_pos = np.array(result.position[:16])
         except Exception as e:
             self.get_logger().warn(f"State response error: {e}")
 
