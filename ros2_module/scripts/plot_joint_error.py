@@ -48,12 +48,13 @@ class LeapErrorPlotter(Node):
         )
 
         self.lines_joints = [
-            self.ax_joints.plot(self.t_hist, self.error_hist[:, i], lw=1)[0]
+            self.ax_joints.plot(self.t_hist, self.error_hist[:, i], lw=1, label=i)[0]
             for i in range(16)
         ]
         self.ax_joints.set_ylim(-0.2, 0.2)
         self.ax_joints.set_ylabel("Joint Error (degs)")
         self.ax_joints.set_title("Leap Hand Joint Errors")
+        self.ax_joints.legend()
 
         self.lines_fingers = [
             self.ax_fingers.plot(
@@ -126,7 +127,7 @@ class LeapErrorPlotter(Node):
             if result and hasattr(result, "position") and len(result.position) >= 16:
                 with self._lock:
                     self.state_pos = np.array(
-                        lhu.LEAPhand_to_allegro(result.position[:16])
+                        lhu.LEAPhand_to_allegro(result.position[:16], zeros=False)
                     )
         except Exception as e:
             self.get_logger().warn(f"State response error: {e}")
