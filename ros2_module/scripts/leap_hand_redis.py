@@ -39,7 +39,7 @@ class LeapHandRedis(Node):
     def __init__(self):
         super().__init__("leap_hand_redis")
 
-        self.pub_hand = self.create_publisher(JointState, "/cmd_allegro", 10)
+        self.pub_hand = self.create_publisher(JointState, "/cmd_leap", 10)
         self.req = LeapPosition.Request()
         self.loop_timer = self.create_timer(0.05, self.loop)
         start_redis_server(REDIS_PORT)

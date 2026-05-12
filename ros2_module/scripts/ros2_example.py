@@ -13,11 +13,10 @@ class MinimalClientAsync(Node):
     def __init__(self):
         super().__init__('minimal_client_async')
         self.cli = self.create_client(LeapPosition, '/leap_position')
-        self.cli = self.create_client(LeapPosVelEff, '/leap_pos_vel_eff')
         ##Note if you need to read multiple values this is faster than calling each service individually for the motors
         while not self.cli.wait_for_service(timeout_sec=1.0):
             self.get_logger().info('service not available, waiting again...')
-        self.req = LeapPosVelEff.Request()
+        self.req = LeapPosition.Request()
         self.pub_hand = self.create_publisher(JointState, '/cmd_allegro', 10)
 
     def send_request(self):
