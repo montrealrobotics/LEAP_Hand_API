@@ -23,6 +23,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     gnupg2 \
     udev \
+    vim \
     && rm -rf /var/lib/apt/lists/*
 
 # ROS 1 installation
@@ -55,7 +56,7 @@ RUN curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o 
     && rm -rf /var/lib/apt/lists/*
 
 FROM ros${ROS_VERSION}-install AS workspace-setup
-RUN pip install dynamixel_sdk numpy
+RUN pip install dynamixel_sdk numpy redis
 RUN mkdir -p /leap_ws/src
 WORKDIR /leap_ws
 

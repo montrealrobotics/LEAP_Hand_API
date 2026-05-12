@@ -18,6 +18,7 @@ services:
       - DISPLAY=${DISPLAY}
     volumes:
       - "/tmp/.X11-unix:/tmp/.X11-unix"
+      - "$HOME/.Xauthority:/root/.Xauthority:rw"
     command: bash -c "source /ros_entrypoint.sh && bash"
     
   leap-hand-ros2:

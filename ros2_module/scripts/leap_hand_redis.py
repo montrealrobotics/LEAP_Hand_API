@@ -14,7 +14,7 @@ from sensor_msgs.msg import JointState
 from leap_hand.srv import LeapPosition
 
 REDIS_KEY = "right_leap_action"
-REDIS_HOST = "127.0.0.1"
+REDIS_HOST = "0.0.0.0"
 REDIS_PORT = 6669
 
 
@@ -27,7 +27,7 @@ def start_redis_server(port=REDIS_PORT):
     except ConnectionRefusedError:
         print(f"[INFO] No Redis server found on port {port}. Starting one...")
         subprocess.Popen(
-            ["redis-server", "--port", str(port)],
+            ["redis-server", "--port", str(port), "--protected-mode", "no"],
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL
         )
